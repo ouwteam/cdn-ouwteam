@@ -13,4 +13,9 @@ class UserDirectory extends Model
     {
         return $this->belongsTo(User::class, "user_id", "id");
     }
+
+    public function files()
+    {
+        return $this->hasMany(UserFile::class, "dir_id", "id");
+    }
 }

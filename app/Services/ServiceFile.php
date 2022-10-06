@@ -1,11 +1,15 @@
 <?php
+namespace App\Services;
 
+use App\Exceptions\BussinessException;
+use App\Models\User;
 use App\Models\UserFile;
 use App\Services\IService;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Facades\Storage;
 
-class ServiceFile implements IService {
+class ServiceFile implements IService
+{
     private static $instance;
     private $db;
 
@@ -51,7 +55,7 @@ class ServiceFile implements IService {
     public function deleteFile(int $id)
     {
         $row = UserFile::find($id);
-        if(empty($row)) {
+        if (empty($row)) {
             throw new BussinessException("File not found");
         }
 
@@ -69,11 +73,47 @@ class ServiceFile implements IService {
     public function deleteFileByUuid(string $uuid)
     {
         $row = $this->getFileByUuid($uuid);
-        if(empty($row)) {
+        if (empty($row)) {
             throw new BussinessException("File not found");
         }
 
         return $this->deleteFile($row->id);
+    }
+
+    public function uploadFile(User $user, \Illuminate\Http\UploadedFile $file, $dir_id)
+    {
+        $fileName = \Illuminate\Support\Str::uuid();
+        $fileExt = strtolower($file->getClientOriginalExtension());
+        if(!$this->isAllowedExt($fileExt)) {
+            throw new BussinessException("Invalid file extention");
+        }
+
+        try {
+            $storedPath = $file->store($user->getUserDirName());
+
+            $model             = new UserFile();
+            $model->uuid       = $fileName;
+            $model->user_id    = $user->id;
+            $model->dir_id     = $dir_id;
+            $model->slug       = $storedPath;
+            $model->filename   = $storedPath;
+            $model->disk       = "local";
+            $model->mimeType   = $file->getMimeType();
+            $model->clientExt  = $fileExt;
+            $model->clientSize = $file->getSize();
+            $model->save();
+
+            return $model;
+        } catch (\Throwable $th) {
+            throw new BussinessException("Upload failed: " . $th->getMessage());
+        }
+
+        return null;
+    }
+
+    public function isAllowedExt($ext) {
+        $exts = ["jpg", "png", "gif", "jpeg", "zip", "tar", "doc", "pdf", "docx", "xls", "xlsx"];
+        return in_array($ext, $exts);
     }
 
     public function getDb()

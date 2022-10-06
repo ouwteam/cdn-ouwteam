@@ -2,7 +2,7 @@
 version: '3'
 services:
     laravel.test:
-        container_name: cdn.outeam.app
+        container_name: cdn.ouwteam.app
         build:
             context: ./vendor/laravel/sail/runtimes/8.1
             dockerfile: Dockerfile
@@ -27,7 +27,7 @@ services:
             - mysql
             - redis
     mysql:
-        container_name: cdn.outeam.mysql
+        container_name: cdn.ouwteam.mysql
         image: 'mysql/mysql-server:8.0'
         ports:
             - '${FORWARD_DB_PORT:-3306}:3306'
@@ -39,7 +39,7 @@ services:
             MYSQL_PASSWORD: '${DB_PASSWORD}'
             MYSQL_ALLOW_EMPTY_PASSWORD: 1
         volumes:
-            - 'sail-mysql:/var/lib/mysql'
+            - 'C:\\docker-data\\cdn.ouwteam.mysql:/var/lib/mysql'
             - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
         networks:
             - sail
@@ -48,12 +48,12 @@ services:
             retries: 3
             timeout: 5s
     redis:
-        container_name: cdn.outeam.redis
+        container_name: cdn.ouwteam.redis
         image: 'redis:alpine'
         ports:
             - '${FORWARD_REDIS_PORT:-6379}:6379'
         volumes:
-            - 'sail-redis:/data'
+            - 'C:\\docker-data\\cdn.ouwteam.redis:/data'
         networks:
             - sail
         healthcheck:

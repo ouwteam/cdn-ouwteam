@@ -16,6 +16,9 @@ class ServiceDir implements IService
         $this->db = $db;
     }
 
+    /**
+     * @return ServiceDir
+     */
     public static function getInstance(ConnectionInterface $db)
     {
         if (empty(static::$instance)) {
@@ -47,7 +50,7 @@ class ServiceDir implements IService
 
         $model->limit($limit);
         $model->offset($offset);
-        $rows = $model->get();
+        $rows = $model->with(['files'])->get();
         return $rows;
     }
 
@@ -55,6 +58,10 @@ class ServiceDir implements IService
     {
         $row = UserDirectory::find($id);
         return $row;
+    }
+
+    public function isValidDir(int $dirId) {
+        return !($this->getDir($dirId) == null);
     }
 
     public function getDb()

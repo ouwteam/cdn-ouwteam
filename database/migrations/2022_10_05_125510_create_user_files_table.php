@@ -17,12 +17,13 @@ return new class extends Migration
             $table->id();
             $table->string("uuid", 36)->unique()->index();
             $table->unsignedBigInteger("user_id")->index();
+            $table->unsignedBigInteger("dir_id")->index();
             $table->string("slug", 140);
             $table->string("filename", 112);
             $table->string("disk", 25);
-            $table->string("mimeType", 100)->nullable();
-            $table->string("clientExt", 100)->nullable();
-            $table->string("clientSize", 100)->nullable();
+            $table->string("mimeType", 55)->nullable();
+            $table->string("clientExt", 5)->nullable();
+            $table->double("clientSize")->nullable();
             $table->timestamps();
         });
     }
