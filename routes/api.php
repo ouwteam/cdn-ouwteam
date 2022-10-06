@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix("/file-manager")->controller(FileManager::class)
+Route::middleware('logedinOnly')->prefix("/file-manager")->controller(FileManager::class)
     ->group(function () {
         Route::get("/dirs", "handleDirListing");
         Route::get("/list", "handleListContent");
@@ -28,7 +28,7 @@ Route::prefix("/file-manager")->controller(FileManager::class)
         Route::post("/upload", "handleUploadFile");
     });
 
-Route::prefix("/presentation")->controller(Presentation::class)
+Route::middleware('logedinOnly')->prefix("/presentation")->controller(Presentation::class)
     ->group(function () {
         Route::get("/view/{fileuuid}", "handleViewFileByUuid");
         Route::get("/download/{fileuuid}", "handleDownloadFileByUuid");

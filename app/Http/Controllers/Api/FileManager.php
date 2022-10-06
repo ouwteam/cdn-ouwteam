@@ -13,20 +13,20 @@ class FileManager extends Controller
     public function handleDirListing(Request $request)
     {
         $service = ServiceDir::getInstance(DB::connection());
-        $dirs = $service->getAllDirs($request->limit ?? 100, $request->start ?? 0, $request->search);
+        $dirs = $service->getAllDirs($request->user(), $request->limit ?? 100, $request->start ?? 0, $request->search);
 
         return response()->json(new FormatResponse(
             200, 
             "",
             [
                 "dirs" => $dirs
-            ] 
+            ]
         ));
     }
 
     public function handleListContent(Request $request)
     {
-        
+
     }
 
     public function handleDeleteFileByUuid(Request $request)

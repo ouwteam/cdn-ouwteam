@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use App\Models\UserDirectory;
 use Illuminate\Database\ConnectionInterface;
 
@@ -24,9 +25,22 @@ class ServiceDir implements IService
         return static::$instance;
     }
 
-    public function getAllDirs(int $limit = 100, int $offset = 0, string $search = null)
+    public function getAllDirs(User $user, int $limit = 100, int $offset = 0, string $search = null)
     {
-        $model = UserDirectory::orderBy("created_at", "desc");
+        $model = UserDirectory::whereBelongsTo($user);
+        if (!empty($search)) {
+            $model->whereRaw("dirname like ?", "%{$search}%");
+        }
+
+        $model->limit($limit);
+        $model->offset($offset);
+        $rows = $model->get();
+        return $rows;
+    }
+
+    public function getDirsWithContent(User $user, int $limit = 100, int $offset = 0, string $search = null)
+    {
+        $model = UserDirectory::whereBelongsTo($user);
         if (!empty($search)) {
             $model->whereRaw("dirname like ?", "%{$search}%");
         }
