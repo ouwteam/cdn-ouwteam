@@ -28,8 +28,8 @@ Route::middleware('logedinOnly')->prefix("/file-manager")->controller(FileManage
         Route::post("/upload", "handleUploadFile");
     });
 
-Route::middleware('logedinOnly')->prefix("/presentation")->controller(Presentation::class)
+Route::prefix("/presentation")->controller(Presentation::class)
     ->group(function () {
-        Route::get("/view/{fileuuid}", "handleViewFileByUuid");
+        Route::get("/view/{fileuuid}", "handleViewFileByUuid")->name("api.view_url");
         Route::get("/download/{fileuuid}", "handleDownloadFileByUuid");
     });

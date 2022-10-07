@@ -43,6 +43,6 @@ class User extends Authenticatable
     ];
 
     public function getUserDirName() {
-        return \Illuminate\Support\Str::slug($this->email) . DIRECTORY_SEPARATOR;
+        return \Illuminate\Support\Str::slug($this->email);
     }
 }

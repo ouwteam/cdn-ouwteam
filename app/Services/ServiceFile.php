@@ -90,6 +90,9 @@ class ServiceFile implements IService
 
         try {
             $storedPath = $file->store($user->getUserDirName());
+            if($storedPath == false) {
+                throw new BussinessException("Upload file failed");
+            }
 
             $model             = new UserFile();
             $model->uuid       = $fileName;
