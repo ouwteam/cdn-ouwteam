@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services;
 
 use App\Exceptions\BussinessException;
@@ -84,26 +85,27 @@ class ServiceFile implements IService
     {
         $fileName = \Illuminate\Support\Str::uuid();
         $fileExt = strtolower($file->getClientOriginalExtension());
-        if(!$this->isAllowedExt($fileExt)) {
+        if (!$this->isAllowedExt($fileExt)) {
             throw new BussinessException("Invalid file extention");
         }
 
         try {
             $storedPath = $file->store($user->getUserDirName());
-            if($storedPath == false) {
+            if ($storedPath == false) {
                 throw new BussinessException("Upload file failed");
             }
 
-            $model             = new UserFile();
-            $model->uuid       = $fileName;
-            $model->user_id    = $user->id;
-            $model->dir_id     = $dir_id;
-            $model->slug       = $storedPath;
-            $model->filename   = $storedPath;
-            $model->disk       = "local";
-            $model->mimeType   = $file->getMimeType();
-            $model->clientExt  = $fileExt;
+            $model = new UserFile();
+            $model->uuid = $fileName;
+            $model->user_id = $user->id;
+            $model->dir_id = $dir_id;
+            $model->slug = $storedPath;
+            $model->filename = $storedPath;
+            $model->disk = "local";
+            $model->mimeType = $file->getMimeType();
+            $model->clientExt = $fileExt;
             $model->clientSize = $file->getSize();
+            $model->originalFileName = $file->getClientOriginalName();
             $model->save();
 
             return $model;
@@ -114,7 +116,8 @@ class ServiceFile implements IService
         return null;
     }
 
-    public function isAllowedExt($ext) {
+    public function isAllowedExt($ext)
+    {
         $exts = ["jpg", "png", "gif", "jpeg", "zip", "tar", "doc", "pdf", "docx", "xls", "xlsx"];
         return in_array($ext, $exts);
     }

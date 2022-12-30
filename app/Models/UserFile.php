@@ -28,7 +28,7 @@ class UserFile extends Model
     protected function filename(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => storage_path('app/users/' . $value),
+            get: fn ($value) => pathinfo(storage_path('app/users/' . $value), PATHINFO_BASENAME),
         );
     }
 }

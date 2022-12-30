@@ -18,7 +18,7 @@ class FileManager extends Controller
         $dirs = $service->getAllDirs($request->user(), $request->limit ?? 100, $request->start ?? 0, $request->search);
 
         return response()->json(new FormatResponse(
-            200, 
+            200,
             "",
             [
                 "dirs" => $dirs
@@ -32,7 +32,7 @@ class FileManager extends Controller
         $contents = $service->getDirsWithContent($request->user(), $request->limit ?? 100, $request->start ?? 0, $request->search);
 
         return response()->json(new FormatResponse(
-            200, 
+            200,
             "",
             [
                 "dirs" => $contents
@@ -42,7 +42,6 @@ class FileManager extends Controller
 
     public function handleDeleteFileByUuid(Request $request)
     {
-
     }
 
     public function handleUploadFile(Request $request)
@@ -54,11 +53,11 @@ class FileManager extends Controller
         $uploaded = "";
 
         try {
-            if(empty($file)) {
+            if (empty($file)) {
                 throw new BussinessException("Invalid upload attachment");
             }
 
-            if(empty($request->dir_id)) {
+            if (empty($request->dir_id)) {
                 throw new BussinessException("Invalid dir ID");
             }
 
@@ -66,7 +65,7 @@ class FileManager extends Controller
         } catch (\Throwable $th) {
             $status = 400;
             $message = "Unknow reason";
-            if($th instanceof BussinessException) {
+            if ($th instanceof BussinessException) {
                 $message = $th->getMessage();
             }
         }
