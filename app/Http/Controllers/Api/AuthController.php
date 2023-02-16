@@ -13,8 +13,8 @@ class AuthController extends Controller
     {
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
-                'message' => 'Unauthorized'
-            ], 401);
+                'message' => 'Invalid email or password'
+            ], 400);
         }
 
         $user = User::where('email', $request->email)->firstOrFail();
