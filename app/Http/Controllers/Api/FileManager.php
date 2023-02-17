@@ -54,8 +54,21 @@ class FileManager extends Controller
         ));
     }
 
-    public function handleDeleteFileByUuid(Request $request)
+    public function handleDeleteFileByUuid(Request $request, string $fileUuid)
     {
+        $service = ServiceFile::getInstance(DB::connection());
+
+        try {
+            $service->deleteFileByUuid($fileUuid);
+            return response()->json(new FormatResponse(200, "", ["deleted" => true]));
+        } catch (\Throwable $th) {
+            $errorMessage = "Failed to handle the request";
+            if ($th instanceof BussinessException) {
+                $errorMessage = $th->getMessage();
+            }
+
+            return response()->json(new FormatResponse(400, $errorMessage, null));
+        }
     }
 
     public function handleUploadFile(Request $request)

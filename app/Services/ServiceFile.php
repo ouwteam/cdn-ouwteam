@@ -61,7 +61,8 @@ class ServiceFile implements IService
         }
 
         try {
-            Storage::disk($row->disk)->delete($row->filename);
+            $userDir = $row->user->getUserDirName();
+            Storage::disk($row->disk)->delete("{$userDir}/{$row->filename}");
             return $row->delete();
         } catch (\Throwable $th) {
             error_log("deleteFile failed: ");

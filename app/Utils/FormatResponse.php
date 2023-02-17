@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Utils;
 
 use Illuminate\Contracts\Support\Arrayable;
@@ -10,7 +11,8 @@ class FormatResponse implements Arrayable, Jsonable
     private $message;
     private $data;
 
-    function __construct($statusCode, $message, $data) {
+    function __construct($statusCode, $message, $data = null)
+    {
         $this->setStatusCode($statusCode);
         $this->setMessage($message);
         $this->setData($data);
@@ -31,7 +33,8 @@ class FormatResponse implements Arrayable, Jsonable
         $this->data = $data;
     }
 
-    public function toArray() {
+    public function toArray()
+    {
         return [
             "statusCode" => $this->statusCode,
             "message" => $this->message,
