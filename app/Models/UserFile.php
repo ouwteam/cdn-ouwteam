@@ -31,4 +31,9 @@ class UserFile extends Model
             get: fn ($value) => pathinfo(storage_path('app/users/' . $value), PATHINFO_BASENAME),
         );
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, "user_id", "id");
+    }
 }

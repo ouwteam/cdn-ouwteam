@@ -40,6 +40,20 @@ class FileManager extends Controller
         ));
     }
 
+    public function handleGetContentByDir(Request $request, int $dirId)
+    {
+        $service = ServiceDir::getInstance(DB::connection());
+        $contents = $service->getFilesByDir($request->user(), $request->limit ?? 100, $request->start ?? 0, $dirId);
+
+        return response()->json(new FormatResponse(
+            200,
+            "",
+            [
+                "files" => $contents
+            ]
+        ));
+    }
+
     public function handleDeleteFileByUuid(Request $request)
     {
     }

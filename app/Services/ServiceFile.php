@@ -49,7 +49,7 @@ class ServiceFile implements IService
 
     public function getFileByUuid(string $uuid)
     {
-        $model = UserFile::where("uuid", $uuid);
+        $model = UserFile::with(['user'])->where("uuid", $uuid);
         return $model->first();
     }
 

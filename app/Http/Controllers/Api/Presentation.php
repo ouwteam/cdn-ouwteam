@@ -15,8 +15,9 @@ class Presentation extends Controller
     {
         $service = ServiceFile::getInstance(DB::connection());
         $file = $service->getFileByUuid($uuid);
+        $user = $file->user;
 
-        return response()->file($file->filename, [
+        return response()->file(storage_path("app/users/{$user->getUserDirName()}/{$file->filename}"), [
             "content-type" => $file->mimeType
         ]);
     }
@@ -25,7 +26,8 @@ class Presentation extends Controller
     {
         $service = ServiceFile::getInstance(DB::connection());
         $file = $service->getFileByUuid($uuid);
+        $user = $file->user;
 
-        return response()->download($file->filename);
+        return response()->download(storage_path("app/users/{$user->getUserDirName()}/{$file->filename}"));
     }
 }

@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->prefix("/file-manager")->controller(FileManag
     ->group(function () {
         Route::get("/dirs", "handleDirListing");
         Route::get("/list", "handleListContent");
+        Route::get("/list/{dirId}", "handleGetContentByDir");
         Route::get("/delete/{fileuuid}", "handleDeleteFileByUuid");
         Route::post("/upload", "handleUploadFile");
     });

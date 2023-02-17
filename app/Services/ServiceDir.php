@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Models\UserDirectory;
+use App\Models\UserFile;
 use Illuminate\Database\ConnectionInterface;
 
 class ServiceDir implements IService
@@ -54,13 +55,23 @@ class ServiceDir implements IService
         return $rows;
     }
 
+    public function getFilesByDir(User $user, int $limit = 100, int $offset = 0, int $dirId)
+    {
+        $model = UserFile::whereBelongsTo($user);
+        $model->where("dir_id", $dirId);
+        $model->limit($limit);
+        $model->offset($offset);
+        return $model->get();
+    }
+
     public function getDir(int $id)
     {
         $row = UserDirectory::find($id);
         return $row;
     }
 
-    public function isValidDir(int $dirId) {
+    public function isValidDir(int $dirId)
+    {
         return !($this->getDir($dirId) == null);
     }
 
